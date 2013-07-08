@@ -1,0 +1,150 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 12.09.0 ] */
+
+/* [wxMaxima: comment start ]
+Fibonacci numbers, Binet's formula
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+_f(n) := (alpha^n-beta^n)/sqrt(5)$
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+f(n) = _f(n);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Inverse of the binet's formula:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+_alpha(n) := f(n+1) + f(n)/alpha $
+_beta(n) := f(n+1) - f(n)*alpha $
+alpha ^ n = _alpha(n);
+beta^n = _beta(n);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+K-th power of a number, expanded
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+unsum
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+_fk(n,k) := 1/sqrt(5)^k * sum( binomial(k,j)*alpha^(n*j)*beta^(n*(k-j)), j, 0, k )$
+f(n)^k = _fk(n,k);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Regroup elements of this sequence, folding opposite ends together
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: comment start ]
+For odd k: no central element
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+_fk_odd(n,k) := 1/sqrt(5)^k * 
+sum( binomial(k,j)*( 
+        alpha^(n*j)*beta^(n*(k-j)) + 
+        alpha^(n*(k-j))*beta^(n*j)
+) 
+, j, 0, (k-1)/2 );
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+move common multiplier (alpha*beta == -1) outside:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+_fk_odd(n,k) := 1/sqrt(5)^k * 
+sum( binomial(k,j)*(-1)^(n*j)*( 
+        beta^(n*(k-2*j)) + 
+        alpha^(n*(k-2*j))
+) 
+, j, 0, (k-1)/2 );
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+For even powers, there is a central element with equal powers in alpha and beta
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+_fk_even(n,k) := 1/sqrt(5)^k * 
+( sum( binomial(k,j)*( 
+          alpha^(n*j)*beta^(n*(k-j)) + 
+          alpha^(n*(k-j))*beta^(n*j)
+  )
+  , j, 0, k/2-1 ) + 
+  binomial(k, k/2)*(-1)^(k/2)
+);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Do the same (move common multiplier outside) i nthis case too:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+_fk_even(n,k) := 1/sqrt(5)^k * 
+( sum( binomial(k,j)*(-1)^(n*j)*( 
+          beta^(n*(k-2*j)) + 
+          alpha^(n*(k-2*j))
+  )
+  , j, 0, k/2-1 ) + 
+  binomial(k, k/2)*(-1)^(k/2)
+);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+Sum of powers:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: comment start ]
+For odd parts:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+sumgeom(a, n) := (a^(n+1)-1)/(a-1);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+_sum_fk_odd(n,k) := 1/sqrt(5)^k * 
+sum( binomial(k,j)*(-1)^(n*j)*( 
+        sumgeom(beta^(k-2*j), n) + 
+        sumgeom(alpha^(k-2*j), n)
+) 
+, j, 0, (k-1)/2 )$
+_sum_fk_odd(n,k);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+sum(binomial(k,j)*factor(
+    ((beta^(k-2*j))^(n+1)-1)/(beta^(k-2*j)-1)+
+    ((alpha^(k-2*j))^(n+1)-1)/(alpha^(k-2*j)-1)
+    )*(-1)^(j*n)
+  ,j,0,(k-1)/2
+)/5^(k/2);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: input   start ] */
+sum(binomial(k,j)*
+  (
+    ((_beta(n+1)^(k-2*j))-1) / (_beta(k-2*j)-1) +
+    ((_alpha(n+1)^(k-2*j))-1) / (_alpha(k-2*j)-1)
+  )*(-1)^(j*n)
+  ,j,0,(k-1)/2
+) / 5^(k/2);
+/* [wxMaxima: input   end   ] */
+
+/* [wxMaxima: comment start ]
+And for even powers:
+   [wxMaxima: comment end   ] */
+
+/* [wxMaxima: input   start ] */
+_sum_fk_even(n,k) := 
+/* [wxMaxima: input   end   ] */
+
+/* Maxima can't load/batch files which end with a comment! */
+"Created with wxMaxima"$
