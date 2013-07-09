@@ -1,6 +1,8 @@
-from sympy import Symbol, binomial, sqrt as sqrts, latex, together
+#!/usr/bin/env python
+# -*- coding: utf-8 -*- 
+from sympy import Symbol, binomial, sqrt as sqrts, together
 
-alpha, beta = map(Symbol, "αβ")
+alpha, beta = map(Symbol, "Î±Î²")
 alphaval = (1+sqrts(5))/2
 betaval = -1/alphaval
 
@@ -65,60 +67,49 @@ def sumFibPower(n, p, viaPowers = True):
     return s / (sqrts(5))**p
 
 
-import re
-
-
-def cleanlatex(s):
-    s = s.replace(r"\operatorname{F}", "f")
-
-    #\operatorname{F}^{2}{\left (n \right )}
-    #f^{2}{\left (n \right )}
-
-    fp_re = re.compile( r"f(\^\{(\d+)\})?\{([^\}]+)\}" )
-    def enclose(s):
-        if len(s) == 1:
-            return s
-        else:
-            return "{"+s+"}"
-    def do_sub(m):
-        pow = m.group(2)
-        arg = m.group(3)
-        arg = arg.replace("\\left", "")
-        arg = arg.replace("\\right", "")
-        arg = arg.strip()
-        if arg[0] == "(" and arg[-1] == ")":
-            arg = arg[1:-1].strip()
-
-        rval = "f_" + enclose(arg)
-        if pow:
-            rval = rval + "^" + enclose(pow)
-        return rval
-
-    s = fp_re.sub(do_sub, s)
-    s = s.replace( r"\left(-1\right)", "(-1)")
-    s = s.replace( "{n}", "n" )
-    #s = s.replace( " + ", "+" )
-    #s = s.replace( " - ", "-" )
-    return s
 
 def showAnswer(p):
     n = Symbol('n')
-    sp = together(sumFibPower(n, p, viaPowers=True).simplify())
-    sn = together(sumFibPower(n, p, viaPowers=False).simplify())
+    sp = together(sumFibPower(n, p, viaPowers=True).expand().simplify())
+    sn = together(sumFibPower(n, p, viaPowers=False).expand().simplify())
 
-    print ("Sum Fib(i)^%d = "%(p))
-    print (sp)
-    print (sn)
-    print ("Or in LaTeX form:")
-    print ("")
-    print (cleanlatex(latex(sp)))
-    print ("")
-    print (cleanlatex(latex(sn)))
+    print ("Sum F(i)^%d = "%(p))
+    print ("=",sp,"=")
+    print ("=",sn)
 
 
+USAGE="""python fibsums_general.py N
+python fibsums_general.py N0 N1
+
+Calculate symbolic expression for the sum of Fibonacci powers:
+
+  Sum F(i)^N  for i = 0..n
+
+where F(i) is i'th Fibonacci's number. Result is again expressed via Fibonacci's numbers.
+If two arguments are given, calculates formulas for range of powers
+"""
 
 if __name__=="__main__":
-#if False and __name__=="__main__":
-    for p in range(1,12):
+    import sys
+    argc = len(sys.argv)
+    if argc <= 1:
+        print (USAGE)
+        exit()
+    else:
+        try:
+            if argc == 2:
+                n0 = n1 = int(sys.argv[1])
+            elif argc == 3:
+                n0, n1 = map(int, sys.argv[1:3])
+            else:
+                raise ValueError("too many arguments")
+            if n1 < n0: raise ValueError("N1 < N0")
+            if n0 < 1:  raise ValueError("N0 < 1")
+        except Exception as err:
+            print ("Error: %s"%err)
+            exit(1)
+            
+    for p in range(n0,n1+1):
         print ("==================================")
         showAnswer(p)
+        
