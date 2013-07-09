@@ -3,7 +3,7 @@ FIBSUMS
 
 Collection of Python scripts, dedicated to symbolic computation of sums of powers of Fibonacci numbers:
 
-![equation](http://chart.apis.google.com/chart?cht=tx&chl=\displaystyle{SF%28n,p%29=\sum_{i=0}^nf_i^p} )
+![equation](http://chart.apis.google.com/chart?cht=tx&chl=%5cdisplaystyle{SF%28n,p%29=%5csum_{i=0}^nf_i^p} )
 
 Sum( fib(i)^p for i in [0 .. n] )
 
