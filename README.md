@@ -7,6 +7,8 @@ Collection of Python scripts, dedicated to symbolic computation of sums of power
 
 Sum( fib(i)^p for i in [0 .. n] )
 
+http://dmishin.blogspot.ru/2013/07/sums-of-powers-of-fibonacci-numbers.html
+
 fibsums_general.py
 ------------------
 
